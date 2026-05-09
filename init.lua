@@ -188,7 +188,9 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
+vim.keymap.set('n', '<C-s>', '<cmd>silent! w<CR>', { noremap = true, silent = true, desc = 'Save file' })
+vim.keymap.set('v', '<C-s>', '<Esc><cmd>silent! w<CR>gv', { noremap = true, silent = true, desc = 'Save file' })
+vim.keymap.set('i', '<C-s>', '<C-o><cmd>silent! w<CR>', { noremap = true, silent = true, desc = 'Save file' })
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('n', '<leader>df', function()
@@ -1126,6 +1128,38 @@ require('lazy').setup({
     },
   },
 })
+vim.keymap.set('i', '<BS>', function()
+  local col = vim.fn.col '.'
+  local line = vim.fn.getline '.'
+  local prev = line:sub(col - 1, col - 1)
+  local next = line:sub(col, col)
+  local pairs = { ['('] = ')', ['['] = ']', ['{'] = '}', ['"'] = '"', ["'"] = "'" }
+  if pairs[prev] == next then
+    return '<Del><BS>'
+  end
+  return '<BS>'
+end, { expr = true })
+vim.opt.clipboard = 'unnamedplus'
+require 'snippets'
+local ls = require 'luasnip'
 
+vim.keymap.set({ 'i', 's' }, '<Tab>', function()
+  if ls.expand_or_jumpable() then
+    ls.expand_or_jump()
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
+  end
+end, { silent = true })
+
+vim.keymap.set({ 'i', 's' }, '<S-Tab>', function()
+  if ls.jumpable(-1) then
+    ls.jump(-1)
+  end
+end, { silent = true })
+vim.keymap.set({ 'n', 'v' }, 'd', '"_d', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, 'D', '"_D', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, 'x', '"_x', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, 'c', '"_c', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, 'C', '"_C', { noremap = true })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
