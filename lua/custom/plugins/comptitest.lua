@@ -38,6 +38,7 @@ return {
       vim.keymap.set('n', '<leader>cr', '<cmd>CompetiTest run<CR>', { desc = '[C]ompetitest [R]un' })
       vim.keymap.set('n', '<leader>cu', '<cmd>CompetiTest show_ui<CR>', { desc = '[C]ompetitest show [U]I' })
       vim.keymap.set('n', '<leader>ca', '<cmd>CompetiTest add_testcase<CR>', { desc = '[C]ompetitest [A]dd testcase' })
+      vim.keymap.set('n', '<leader>cd', ':CompetiTest delete_testcase<CR>', { desc = 'Delete Test Case' })
     end,
   },
 }
