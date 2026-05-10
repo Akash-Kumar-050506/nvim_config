@@ -187,6 +187,10 @@ vim.api.nvim_create_autocmd('FileType', {
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
+vim.keymap.set('n', '<C-a>', function()
+  vim.api.nvim_win_set_cursor(0, { 1, 0 })
+  vim.cmd 'normal! VG'
+end, { desc = 'Select all' })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<C-s>', '<cmd>silent! w<CR>', { noremap = true, silent = true, desc = 'Save file' })
 vim.keymap.set('v', '<C-s>', '<Esc><cmd>silent! w<CR>gv', { noremap = true, silent = true, desc = 'Save file' })
